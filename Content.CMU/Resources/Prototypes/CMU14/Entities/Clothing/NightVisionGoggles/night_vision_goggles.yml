@@ -1,0 +1,56 @@
+- type: entity
+  parent: ClothingEyesBase
+  id: CMUGlassesNightVisionGoggles
+  name: AN/PVS-9 night vision goggles
+  description: Mass-produced night vision goggles. They let you see in the dark, but the green glow of the tubes gives the wearer away, and the cheap wiring shorts out every so often. A screwdriver will set them right.
+  components:
+  - type: Item
+    storedRotation: 0
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Eyes/Glasses/spp_nv.rsi
+    layers:
+    - state: icon
+      map: [ "icon" ]
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Eyes/Glasses/spp_nv.rsi
+  - type: NightVisionItem
+    actionId: CMUActionToggleNightVisionGoggles
+    enableOnEquip: false
+    green: true
+    defaultState: Full
+    blockScopes: true
+  - type: CMUNightVisionGoggles
+  # The glow that gives the wearer away; switched on and off with the goggles.
+  - type: PointLight
+    enabled: false
+    color: "#5cff6e"
+    radius: 2.5
+    energy: 1.2
+    softness: 1
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.NightVisionItemVisuals.Active:
+        icon:
+          True: { state: icon_on }
+          False: { state: icon }
+
+- type: entity
+  parent: ActionMarineBase
+  id: CMUActionToggleNightVisionGoggles
+  name: Toggle night vision goggles
+  description: Switch your night vision goggles on or off. They glow while on.
+  components:
+  - type: Action
+    useDelay: 0.5
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Objects/Clothing/Eyes/Glasses/spp_nv.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: _RMC14/Objects/Clothing/Eyes/Glasses/spp_nv.rsi
+      state: icon_on
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
+  - type: InstantAction
+    event: !type:ToggleActionEvent
