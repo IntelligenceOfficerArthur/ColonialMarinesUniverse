@@ -5,3 +5,4 @@ cmu-nvg-repair-start = You start tightening the loose contacts on {THE($goggles)
 cmu-nvg-repair-done = You fix {THE($goggles)}.
 cmu-nvg-examine-working = [color=green]It seems to be working.[/color]
 cmu-nvg-examine-broken = [color=red]It has shorted out. A screwdriver could fix it.[/color]
+cmu-nvg-examine-helmet = Clip it onto a helmet and flip it down to use its night vision.

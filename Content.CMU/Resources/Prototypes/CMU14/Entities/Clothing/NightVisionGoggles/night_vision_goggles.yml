@@ -1,40 +1,42 @@
 - type: entity
-  parent: ClothingEyesBase
+  parent: RMCHelmetGarbToggleableBase
   id: CMUGlassesNightVisionGoggles
   name: brand new M1 multi-spectrum visor
-  description: A fresh-from-the-crate M1 multi-spectrum visor. The flip-down optics let you see in the dark, but the green glow of the tubes gives the wearer away, and the wiring still shorts out every so often. A screwdriver will set it right.
+  description: A fresh-from-the-crate M1 multi-spectrum visor. Clip it onto your helmet and flip it down to see in the dark, but the green glow of the tubes gives the wearer away, and the wiring still shorts out every so often. A screwdriver will set it right.
   components:
-  - type: Item
-    storedRotation: 0
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/HelmetGarb/nv_goggles_alt.rsi
     state: icon
-  - type: Clothing
+  - type: Item
     sprite: _RMC14/Objects/Clothing/HelmetGarb/nv_goggles_alt.rsi
-    # The visor sprite has no eyes state of its own, so the flipped-down visor is drawn instead.
-    clothingVisuals:
-      eyes:
-      - state: hat-down
+  - type: HelmetAccessory
+    rsi:
+      sprite: _RMC14/Objects/Clothing/HelmetGarb/nv_goggles_alt.rsi
+      state: helmet
+    toggledRsi:
+      sprite: _RMC14/Objects/Clothing/HelmetGarb/nv_goggles_alt.rsi
+      state: helmet-down
+    hatRsi:
+      sprite: _RMC14/Objects/Clothing/HelmetGarb/nv_goggles_alt.rsi
+      state: hat
+    hatToggledRsi:
+      sprite: _RMC14/Objects/Clothing/HelmetGarb/nv_goggles_alt.rsi
+      state: hat-down
+  # Switched on and off by CMUNightVisionGoggles while the visor is flipped down on a worn helmet.
   - type: NightVisionItem
-    actionId: CMUActionToggleNightVisionGoggles
+    actionId: null
+    toggleable: false
     enableOnEquip: false
     green: true
     defaultState: Full
     blockScopes: true
   - type: CMUNightVisionGoggles
-  # The glow that gives the wearer away; switched on and off with the goggles.
-  - type: PointLight
-    enabled: false
-    color: "#5cff6e"
-    radius: 2.5
-    energy: 1.2
-    softness: 1
 
 - type: entity
   parent: ActionMarineBase
   id: CMUActionToggleNightVisionGoggles
   name: Toggle M1 multi-spectrum visor
-  description: Switch your visor's night vision on or off. It glows while on.
+  description: Flip your helmet's visor down to see in the dark, or back up. It glows while on.
   components:
   - type: Action
     useDelay: 0.5
@@ -44,4 +46,15 @@
       state: icon
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:ToggleActionEvent
+    event: !type:CMUToggleNightVisionGogglesActionEvent
+
+# The green glow that gives a visor wearer away in the dark. Spawned on the wearer while the visor is on.
+- type: entity
+  id: CMUNightVisionGogglesGlow
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    color: "#5cff6e"
+    radius: 2.5
+    energy: 1.2
+    softness: 1
