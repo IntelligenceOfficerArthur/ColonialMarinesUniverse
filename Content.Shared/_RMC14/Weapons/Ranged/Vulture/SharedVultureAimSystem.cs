@@ -10,7 +10,7 @@ using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
-using static Content.Shared.Movement.Systems.SharedMoverController;
+using Content.Shared.Movement.Systems;
 
 namespace Content.Shared._RMC14.Weapons.Ranged.Vulture;
 
