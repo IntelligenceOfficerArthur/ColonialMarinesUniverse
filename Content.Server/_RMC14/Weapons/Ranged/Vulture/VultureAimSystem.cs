@@ -128,6 +128,7 @@ public sealed partial class VultureAimSystem : SharedVultureAimSystem
             }
 
             ResetAim(rifle, ev.User, ev.Scope.Owner, direction);
+            UpdateSniperCanMove(ev.User);
             ValidateOrFindSpotter(rifle);
             MoveRelays(rifle);
             return;

@@ -35,30 +35,6 @@ public sealed partial class VultureAimComponent : Component
     public EntityUid? ScopeRightAction;
 
     [DataField, AutoNetworkedField]
-    public EntProtoId WindageLeftActionId = "RMCActionVultureWindageLeft";
-
-    [DataField, AutoNetworkedField]
-    public EntityUid? WindageLeftAction;
-
-    [DataField, AutoNetworkedField]
-    public EntProtoId WindageRightActionId = "RMCActionVultureWindageRight";
-
-    [DataField, AutoNetworkedField]
-    public EntityUid? WindageRightAction;
-
-    [DataField, AutoNetworkedField]
-    public EntProtoId ElevationUpActionId = "RMCActionVultureElevationUp";
-
-    [DataField, AutoNetworkedField]
-    public EntityUid? ElevationUpAction;
-
-    [DataField, AutoNetworkedField]
-    public EntProtoId ElevationDownActionId = "RMCActionVultureElevationDown";
-
-    [DataField, AutoNetworkedField]
-    public EntityUid? ElevationDownAction;
-
-    [DataField, AutoNetworkedField]
     public EntProtoId BreathActionId = "RMCActionVultureBreath";
 
     [DataField, AutoNetworkedField]

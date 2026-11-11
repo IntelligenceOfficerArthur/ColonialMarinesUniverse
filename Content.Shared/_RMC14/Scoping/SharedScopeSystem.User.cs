@@ -38,6 +38,10 @@ public partial class SharedScopeSystem
         if (!args.HasDirectionalMovement)
             return;
 
+        // The Vulture rifle scope uses movement keys to nudge the crosshair, see SharedVultureAimSystem.
+        if (IsUsingVultureRifleScope(ent))
+            return;
+
         if (!ent.Comp.AllowMovement ||
             IsUsingMountedVultureSpotterScope(ent))
         {
@@ -109,6 +113,13 @@ public partial class SharedScopeSystem
 
         if (TryComp(scope, out ScopeComponent? scopeComponent) && scopeComponent.User == ent)
             Unscope((scope.Value, scopeComponent));
+    }
+
+    private bool IsUsingVultureRifleScope(Entity<ScopingComponent> user)
+    {
+        return user.Comp.Scope is { } scope &&
+               _container.TryGetContainingContainer((scope, null), out var container) &&
+               HasComp<VultureAimComponent>(container.Owner);
     }
 
     private bool IsUsingMountedVultureSpotterScope(Entity<ScopingComponent> user)

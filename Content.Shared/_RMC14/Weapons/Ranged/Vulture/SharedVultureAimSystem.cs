@@ -2,17 +2,21 @@ using System.Numerics;
 using Content.Shared._RMC14.Scoping;
 using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared.Actions;
+using Content.Shared.ActionBlocker;
+using Content.Shared.Movement.Events;
 using Content.Shared.Popups;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
+using static Content.Shared.Movement.Systems.SharedMoverController;
 
 namespace Content.Shared._RMC14.Weapons.Ranged.Vulture;
 
 public abstract partial class SharedVultureAimSystem : EntitySystem
 {
+    [Dependency] private ActionBlockerSystem _blocker = default!;
     [Dependency] protected SharedActionsSystem Actions = default!;
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private INetManager _net = default!;
@@ -27,12 +31,11 @@ public abstract partial class SharedVultureAimSystem : EntitySystem
         SubscribeLocalEvent<VultureAimComponent, VultureScopeBackwardActionEvent>(OnScopeBackward);
         SubscribeLocalEvent<VultureAimComponent, VultureScopeLeftActionEvent>(OnScopeLeft);
         SubscribeLocalEvent<VultureAimComponent, VultureScopeRightActionEvent>(OnScopeRight);
-        SubscribeLocalEvent<VultureAimComponent, VultureWindageLeftActionEvent>(OnWindageLeft);
-        SubscribeLocalEvent<VultureAimComponent, VultureWindageRightActionEvent>(OnWindageRight);
-        SubscribeLocalEvent<VultureAimComponent, VultureElevationUpActionEvent>(OnElevationUp);
-        SubscribeLocalEvent<VultureAimComponent, VultureElevationDownActionEvent>(OnElevationDown);
         SubscribeLocalEvent<VultureAimComponent, VultureBreathActionEvent>(OnBreath);
         SubscribeLocalEvent<VultureAimComponent, AttemptShootEvent>(OnAttemptShoot, before: [typeof(CMGunSystem)]);
+        SubscribeLocalEvent<ScopingComponent, MoveInputEvent>(OnScopingMoveInput);
+        SubscribeLocalEvent<ScopingComponent, UpdateCanMoveEvent>(OnScopingCanMove);
+        SubscribeLocalEvent<ScopingComponent, ComponentShutdown>(OnScopingShutdown);
     }
 
     private void OnGetItemActions(Entity<VultureAimComponent> ent, ref GetItemActionsEvent args)
@@ -41,10 +44,6 @@ public abstract partial class SharedVultureAimSystem : EntitySystem
         args.AddAction(ref ent.Comp.ScopeBackwardAction, ent.Comp.ScopeBackwardActionId);
         args.AddAction(ref ent.Comp.ScopeLeftAction, ent.Comp.ScopeLeftActionId);
         args.AddAction(ref ent.Comp.ScopeRightAction, ent.Comp.ScopeRightActionId);
-        args.AddAction(ref ent.Comp.WindageLeftAction, ent.Comp.WindageLeftActionId);
-        args.AddAction(ref ent.Comp.WindageRightAction, ent.Comp.WindageRightActionId);
-        args.AddAction(ref ent.Comp.ElevationUpAction, ent.Comp.ElevationUpActionId);
-        args.AddAction(ref ent.Comp.ElevationDownAction, ent.Comp.ElevationDownActionId);
         args.AddAction(ref ent.Comp.BreathAction, ent.Comp.BreathActionId);
 
         if (_net.IsServer)
@@ -119,80 +118,73 @@ public abstract partial class SharedVultureAimSystem : EntitySystem
         args.Handled = true;
     }
 
-    private void OnWindageLeft(Entity<VultureAimComponent> ent, ref VultureWindageLeftActionEvent args)
+    /// <summary>
+    ///     While looking through the rifle scope, WASD nudges the crosshair inside the firing box
+    ///     instead of moving (or unscoping) the sniper.
+    /// </summary>
+    private void OnScopingMoveInput(Entity<ScopingComponent> ent, ref MoveInputEvent args)
     {
-        if (!CanUse(ent, args))
-            return;
-
-        if (_net.IsClient)
+        if (_net.IsClient ||
+            !TryGetRifleAim(ent.Comp.Scope, out var aim) ||
+            aim.Comp.Sniper != ent.Owner)
         {
-            args.Handled = true;
             return;
         }
 
-        ent.Comp.CrosshairAdjust = new Vector2i(
-            Math.Clamp(ent.Comp.CrosshairAdjust.X - 1, -ent.Comp.BoxRadius, ent.Comp.BoxRadius),
-            ent.Comp.CrosshairAdjust.Y);
-        UpdateAimCoordinates(ent);
-        Dirty(ent);
-        args.Handled = true;
+        var pressed = args.Entity.Comp.HeldMoveButtons & ~args.OldMovement;
+        var delta = Vector2i.Zero;
+        if ((pressed & MoveButtons.Up) != 0)
+            delta += new Vector2i(0, 1);
+        if ((pressed & MoveButtons.Down) != 0)
+            delta += new Vector2i(0, -1);
+        if ((pressed & MoveButtons.Left) != 0)
+            delta += new Vector2i(-1, 0);
+        if ((pressed & MoveButtons.Right) != 0)
+            delta += new Vector2i(1, 0);
+
+        if (delta == Vector2i.Zero)
+            return;
+
+        var radius = aim.Comp.BoxRadius;
+        aim.Comp.CrosshairAdjust = new Vector2i(
+            Math.Clamp(aim.Comp.CrosshairAdjust.X + delta.X, -radius, radius),
+            Math.Clamp(aim.Comp.CrosshairAdjust.Y + delta.Y, -radius, radius));
+        UpdateAimCoordinates(aim);
+        Dirty(aim);
     }
 
-    private void OnWindageRight(Entity<VultureAimComponent> ent, ref VultureWindageRightActionEvent args)
+    private void OnScopingCanMove(Entity<ScopingComponent> ent, ref UpdateCanMoveEvent args)
     {
-        if (!CanUse(ent, args))
+        if (ent.Comp.LifeStage > ComponentLifeStage.Running)
             return;
 
-        if (_net.IsClient)
-        {
-            args.Handled = true;
-            return;
-        }
-
-        ent.Comp.CrosshairAdjust = new Vector2i(
-            Math.Clamp(ent.Comp.CrosshairAdjust.X + 1, -ent.Comp.BoxRadius, ent.Comp.BoxRadius),
-            ent.Comp.CrosshairAdjust.Y);
-        UpdateAimCoordinates(ent);
-        Dirty(ent);
-        args.Handled = true;
+        if (TryGetRifleAim(ent.Comp.Scope, out _))
+            args.Cancel();
     }
 
-    private void OnElevationUp(Entity<VultureAimComponent> ent, ref VultureElevationUpActionEvent args)
+    private void OnScopingShutdown(Entity<ScopingComponent> ent, ref ComponentShutdown args)
     {
-        if (!CanUse(ent, args))
-            return;
-
-        if (_net.IsClient)
-        {
-            args.Handled = true;
-            return;
-        }
-
-        ent.Comp.CrosshairAdjust = new Vector2i(
-            ent.Comp.CrosshairAdjust.X,
-            Math.Clamp(ent.Comp.CrosshairAdjust.Y + 1, -ent.Comp.BoxRadius, ent.Comp.BoxRadius));
-        UpdateAimCoordinates(ent);
-        Dirty(ent);
-        args.Handled = true;
+        if (!TerminatingOrDeleted(ent) && TryGetRifleAim(ent.Comp.Scope, out _))
+            _blocker.UpdateCanMove(ent);
     }
 
-    private void OnElevationDown(Entity<VultureAimComponent> ent, ref VultureElevationDownActionEvent args)
+    protected void UpdateSniperCanMove(EntityUid sniper)
     {
-        if (!CanUse(ent, args))
-            return;
+        _blocker.UpdateCanMove(sniper);
+    }
 
-        if (_net.IsClient)
+    private bool TryGetRifleAim(EntityUid? scope, out Entity<VultureAimComponent> aim)
+    {
+        if (scope != null &&
+            _container.TryGetContainingContainer(scope.Value, out var container) &&
+            TryComp(container.Owner, out VultureAimComponent? comp))
         {
-            args.Handled = true;
-            return;
+            aim = (container.Owner, comp);
+            return true;
         }
 
-        ent.Comp.CrosshairAdjust = new Vector2i(
-            ent.Comp.CrosshairAdjust.X,
-            Math.Clamp(ent.Comp.CrosshairAdjust.Y - 1, -ent.Comp.BoxRadius, ent.Comp.BoxRadius));
-        UpdateAimCoordinates(ent);
-        Dirty(ent);
-        args.Handled = true;
+        aim = default;
+        return false;
     }
 
     private void OnBreath(Entity<VultureAimComponent> ent, ref VultureBreathActionEvent args)

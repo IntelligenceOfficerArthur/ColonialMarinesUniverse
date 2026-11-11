@@ -9,6 +9,7 @@ using Robust.Shared.Containers;
 using Robust.Shared.Enums;
 using Robust.Shared.Graphics.RSI;
 using Robust.Shared.Map;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
@@ -24,10 +25,15 @@ public sealed partial class VultureAimOverlay : Overlay
     private const string UnsteadyReticle = "vulture_unsteady";
     private const string SteadyReticle = "vulture_steady";
 
+    // Reuses the VTOL fighter's thermal optics shader (CMU14 content).
+    private static readonly ProtoId<ShaderPrototype> ThermalShaderId = "CMUFighterSensor";
+
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IEyeManager _eye = default!;
     [Dependency] private IPlayerManager _player = default!;
 
+    private readonly ShaderInstance _thermalShader;
     private readonly SharedContainerSystem _container;
     private readonly IEntityManager _entityManager;
     private readonly SpriteSystem _sprite;
@@ -38,6 +44,7 @@ public sealed partial class VultureAimOverlay : Overlay
     public VultureAimOverlay(IEntityManager entityManager)
     {
         IoCManager.InjectDependencies(this);
+        _thermalShader = _prototypes.Index(ThermalShaderId).InstanceUnique();
         _entityManager = entityManager;
         _container = entityManager.System<SharedContainerSystem>();
         _sprite = entityManager.System<SpriteSystem>();
@@ -67,6 +74,8 @@ public sealed partial class VultureAimOverlay : Overlay
         VultureAimComponent aim,
         bool isSniper)
     {
+        DrawThermal(args);
+
         if (!TryGetViewCenter(player, scoping, aim, out var center) ||
             center.MapId != args.MapId)
         {
@@ -120,6 +129,22 @@ public sealed partial class VultureAimOverlay : Overlay
         }
 
         handle.DrawRect(clear, boxColor, false);
+    }
+
+    /// <summary>Thermal optics for anyone looking through the rifle scope or a linked spotter scope.</summary>
+    private void DrawThermal(in OverlayDrawArgs args)
+    {
+        _thermalShader.SetParameter("thermal", 1f);
+        var handle = args.ScreenHandle;
+        handle.UseShader(_thermalShader);
+        handle.DrawTextureRect(args.Viewport.RenderTarget.Texture, args.ViewportBounds);
+        handle.UseShader(null);
+    }
+
+    protected override void DisposeBehavior()
+    {
+        _thermalShader.Dispose();
+        base.DisposeBehavior();
     }
 
     private void DrawWorld(
