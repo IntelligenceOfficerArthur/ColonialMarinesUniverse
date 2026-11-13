@@ -65,6 +65,7 @@
       - VultureWhitelist
   - type: VultureRifle
   - type: VultureAim
+    keyboardAim: true # CMU14: WASD steers the crosshair, Shift holds breath
   - type: AttachableHolder
     slots:
       rmc-aslot-barrel:
@@ -306,10 +307,10 @@
     - RMCVultureBarrel
 
 - type: entity
-  parent: RMCM96SIntegratedScope
+  parent: [ RMCM96SIntegratedScope, RMCPowerCellSlotUnremovableSuper ] # CMU14: internal battery for the thermal sight
   id: RMCVultureScope
   name: M707 integrated scope
-  description: The fixed optics package for the M707 "Vulture".
+  description: The fixed optics package for the M707 "Vulture". Its thermal sight is a heavy drain on the internal battery. # CMU14
   components:
   - type: Sprite
     state: vulture_scope
@@ -343,6 +344,17 @@
       offset: 15
       allowMovement: false
       doAfter: 0
+  # CMU14 Vulture thermal Begin: replaces the inherited free green night vision with a high-contrast thermal picture.
+  # A Super cell holds 20000 J, so a 200 W draw gives a little under two minutes of thermal per charge.
+  - type: NightVisionItem
+    green: false
+    noiseStrength: 0
+    vignetteStrength: 0
+  - type: PowerCellDraw
+    enabled: false
+    drawRate: 200
+  - type: CMUVultureThermal
+  # CMU14 End
   - type: Appearance
   - type: ItemCamouflage
     states:

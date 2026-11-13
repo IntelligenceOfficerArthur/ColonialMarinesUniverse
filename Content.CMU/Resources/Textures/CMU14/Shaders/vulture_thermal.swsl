@@ -1,0 +1,22 @@
+// Vulture thermal optics. Starts from the fighter sensor's luminance remap, then narrows the transfer curve and
+// blurs the source so targets read as white blobs against a dark scene instead of identifiable sprites.
+uniform highp float low_cut;
+uniform highp float high_cut;
+uniform highp float blur_radius;
+uniform highp float floor_level;
+
+highp float luma(highp vec2 uv) {
+    return dot(zTexture(uv).rgb, vec3(0.2126, 0.7152, 0.0722));
+}
+
+void fragment() {
+    highp vec2 s = TEXTURE_PIXEL_SIZE * blur_radius;
+    highp float sum = luma(UV)
+        + luma(UV + vec2(s.x, 0.0)) + luma(UV - vec2(s.x, 0.0))
+        + luma(UV + vec2(0.0, s.y)) + luma(UV - vec2(0.0, s.y))
+        + luma(UV + s) + luma(UV - s)
+        + luma(UV + vec2(s.x, -s.y)) + luma(UV + vec2(-s.x, s.y));
+    highp float heat = smoothstep(low_cut, high_cut, sum / 9.0);
+    highp float level = floor_level + (1.0 - floor_level) * heat;
+    COLOR = vec4(vec3(level), 1.0);
+}
