@@ -1,0 +1,4 @@
+- type: shader
+  id: CMUVultureThermal
+  kind: source
+  path: "/Textures/CMU14/Shaders/vulture_thermal.swsl"

@@ -145,6 +145,27 @@ public sealed partial class VultureAimComponent : Component
     [DataField, AutoNetworkedField]
     public TimeSpan BreathCooldown = TimeSpan.FromSeconds(8);
 
+    // CMU14 Vulture keyboard aim Begin: movement keys steer the crosshair instead of the action bar
+    /// <summary>
+    ///     When set, WASD moves the crosshair inside the box and Shift holds breath. The windage, elevation and
+    ///     breath actions are no longer granted.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool KeyboardAim;
+
+    /// <summary>
+    ///     How long a movement key must be held before it starts repeating.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public TimeSpan KeyRepeatDelay = TimeSpan.FromSeconds(0.35);
+
+    /// <summary>
+    ///     Time between repeated crosshair steps while a movement key stays held.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public TimeSpan KeyRepeatInterval = TimeSpan.FromSeconds(0.2);
+    // CMU14 End
+
     public bool BreathActive(TimeSpan time)
     {
         return BreathEndsAt > time;

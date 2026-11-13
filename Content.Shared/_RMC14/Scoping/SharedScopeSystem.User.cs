@@ -38,6 +38,10 @@ public partial class SharedScopeSystem
         if (!args.HasDirectionalMovement)
             return;
 
+        // CMU14: keyboard-aimed Vulture scopes spend movement keys on the crosshair instead of unscoping.
+        if (IsKeyboardAimedVultureScope(ent))
+            return;
+
         if (!ent.Comp.AllowMovement ||
             IsUsingMountedVultureSpotterScope(ent))
         {
@@ -116,6 +120,15 @@ public partial class SharedScopeSystem
         return user.Comp.Scope is { } scope &&
                TryComp(scope, out ScopeComponent? scopeComp) &&
                IsMountedVultureSpotterScope((scope, scopeComp));
+    }
+
+    // CMU14 method
+    private bool IsKeyboardAimedVultureScope(Entity<ScopingComponent> user)
+    {
+        return user.Comp.Scope is { } scope &&
+               _container.TryGetContainingContainer((scope, null), out var container) &&
+               TryComp(container.Owner, out VultureAimComponent? aim) &&
+               aim.KeyboardAim;
     }
 
     private bool IsMountedVultureSpotterScope(Entity<ScopeComponent> scope)

@@ -41,11 +41,15 @@ public abstract partial class SharedVultureAimSystem : EntitySystem
         args.AddAction(ref ent.Comp.ScopeBackwardAction, ent.Comp.ScopeBackwardActionId);
         args.AddAction(ref ent.Comp.ScopeLeftAction, ent.Comp.ScopeLeftActionId);
         args.AddAction(ref ent.Comp.ScopeRightAction, ent.Comp.ScopeRightActionId);
-        args.AddAction(ref ent.Comp.WindageLeftAction, ent.Comp.WindageLeftActionId);
-        args.AddAction(ref ent.Comp.WindageRightAction, ent.Comp.WindageRightActionId);
-        args.AddAction(ref ent.Comp.ElevationUpAction, ent.Comp.ElevationUpActionId);
-        args.AddAction(ref ent.Comp.ElevationDownAction, ent.Comp.ElevationDownActionId);
-        args.AddAction(ref ent.Comp.BreathAction, ent.Comp.BreathActionId);
+        // CMU14: keyboard aim replaces the crosshair and breath actions with WASD and Shift.
+        if (!ent.Comp.KeyboardAim)
+        {
+            args.AddAction(ref ent.Comp.WindageLeftAction, ent.Comp.WindageLeftActionId);
+            args.AddAction(ref ent.Comp.WindageRightAction, ent.Comp.WindageRightActionId);
+            args.AddAction(ref ent.Comp.ElevationUpAction, ent.Comp.ElevationUpActionId);
+            args.AddAction(ref ent.Comp.ElevationDownAction, ent.Comp.ElevationDownActionId);
+            args.AddAction(ref ent.Comp.BreathAction, ent.Comp.BreathActionId);
+        }
 
         if (_net.IsServer)
             Dirty(ent);
