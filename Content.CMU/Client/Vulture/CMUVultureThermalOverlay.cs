@@ -86,6 +86,8 @@ public sealed class CMUVultureThermalOverlay : Overlay
             _worldShader.SetParameter("high_cut", thermal.HighCut);
             _worldShader.SetParameter("floor_level", thermal.FloorLevel);
             _worldShader.SetParameter("ceiling_level", thermal.CeilingLevel);
+            _worldShader.SetParameter("detail_gain", thermal.DetailGain);
+            _worldShader.SetParameter("detail_radius", thermal.DetailRadius);
 
             handle.UseShader(_worldShader);
             handle.DrawRect(args.WorldBounds, Color.White);
