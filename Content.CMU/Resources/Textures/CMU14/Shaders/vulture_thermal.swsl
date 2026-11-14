@@ -1,22 +1,16 @@
-// Vulture thermal optics. Starts from the fighter sensor's luminance remap, then narrows the transfer curve and
-// blurs the source so targets read as white blobs against a dark scene instead of identifiable sprites.
+// Vulture thermal optics, world pass. Starts from the fighter sensor's luminance remap, but keeps the scene as a
+// dim grey backdrop (capped below the heat colours) so warm bodies, drawn afterwards, are what the eye goes to.
+uniform sampler2D SCREEN_TEXTURE;
+
 uniform highp float low_cut;
 uniform highp float high_cut;
-uniform highp float blur_radius;
 uniform highp float floor_level;
-
-highp float luma(highp vec2 uv) {
-    return dot(zTexture(uv).rgb, vec3(0.2126, 0.7152, 0.0722));
-}
+uniform highp float ceiling_level;
 
 void fragment() {
-    highp vec2 s = TEXTURE_PIXEL_SIZE * blur_radius;
-    highp float sum = luma(UV)
-        + luma(UV + vec2(s.x, 0.0)) + luma(UV - vec2(s.x, 0.0))
-        + luma(UV + vec2(0.0, s.y)) + luma(UV - vec2(0.0, s.y))
-        + luma(UV + s) + luma(UV - s)
-        + luma(UV + vec2(s.x, -s.y)) + luma(UV + vec2(-s.x, s.y));
-    highp float heat = smoothstep(low_cut, high_cut, sum / 9.0);
-    highp float level = floor_level + (1.0 - floor_level) * heat;
+    highp vec4 source = zTextureSpec(SCREEN_TEXTURE, UV);
+    highp float luminance = dot(source.rgb, vec3(0.2126, 0.7152, 0.0722));
+    highp float cold = smoothstep(low_cut, high_cut, luminance);
+    highp float level = floor_level + (ceiling_level - floor_level) * cold;
     COLOR = vec4(vec3(level), 1.0);
 }

@@ -10,27 +10,46 @@ namespace Content.Shared.CMU14.Vulture;
 public sealed partial class CMUVultureThermalComponent : Component
 {
     /// <summary>
-    ///     Luminance at or below which a pixel is fully cold.
+    ///     Luminance at or below which the backdrop is darkest.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public float LowCut = 0.30f;
+    public float LowCut = 0.10f;
 
     /// <summary>
-    ///     Luminance at or above which a pixel is fully hot. A narrow gap to <see cref="LowCut"/> makes the picture
-    ///     close to black and white, which hides the detail needed to identify a target.
+    ///     Luminance at or above which the backdrop is brightest. A narrower band than the fighter sensor gives
+    ///     the backdrop more contrast.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public float HighCut = 0.62f;
+    public float HighCut = 0.75f;
 
     /// <summary>
-    ///     Radius in viewport pixels of the blur that merges sprite detail into blobs.
+    ///     Brightness of the darkest backdrop, so the scene never goes fully black.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public float BlurRadius = 1.25f;
+    public float FloorLevel = 0.05f;
 
     /// <summary>
-    ///     Brightness of cold pixels, so the scene never goes fully black.
+    ///     Brightness of the brightest backdrop. Kept well under white so heat colours stand out.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public float FloorLevel = 0.04f;
+    public float CeilingLevel = 0.5f;
+
+    /// <summary>
+    ///     Base heat of a living body, from 0 (dark red) to 1 (yellow).
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float HeatBase = 0.6f;
+
+    /// <summary>
+    ///     How much a body's own sprite brightness shifts its heat. A low value makes bodies look alike, which makes
+    ///     telling a marine from a xeno from a civilian harder.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float HeatSpread = 0.5f;
+
+    /// <summary>
+    ///     When false a body must be in line of sight. When true it shows through walls.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool SeeThroughWalls;
 }

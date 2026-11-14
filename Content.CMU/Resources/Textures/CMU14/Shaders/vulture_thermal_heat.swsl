@@ -1,0 +1,22 @@
+// Vulture thermal optics, heat pass. Redraws a warm body's sprite as a heat silhouette. The sprite's own brightness only
+// varies the heat a little, so every living thing reads as the same orange blob with a few hotter patches.
+uniform highp float heat_base;
+uniform highp float heat_spread;
+
+void fragment() {
+    highp vec4 sprite = zTexture(UV);
+    if (sprite.a < 0.05) {
+        discard;
+    }
+
+    highp float luminance = dot(sprite.rgb, vec3(0.2126, 0.7152, 0.0722));
+    highp float heat = clamp(heat_base + heat_spread * (luminance - 0.5), 0.0, 1.0);
+
+    // Dark red, through orange, to yellow at the hottest patches.
+    highp vec3 color = vec3(
+        smoothstep(0.05, 0.40, heat),
+        smoothstep(0.35, 0.95, heat) * 0.9,
+        smoothstep(0.85, 1.0, heat) * 0.4);
+
+    COLOR = vec4(color, sprite.a);
+}
