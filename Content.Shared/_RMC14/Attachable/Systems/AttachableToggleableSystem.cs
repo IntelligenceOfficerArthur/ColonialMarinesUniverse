@@ -1,3 +1,4 @@
+using Content.Shared._RMC14.Weapons.Ranged.Vulture; // CMU14
 using System.Numerics;
 using Content.Shared._RMC14.Attachable.Components;
 using Content.Shared._RMC14.Attachable.Events;
@@ -37,6 +38,7 @@ namespace Content.Shared._RMC14.Attachable.Systems;
 public sealed partial class AttachableToggleableSystem : EntitySystem
 {
     [Dependency] private ActionContainerSystem _actionContainerSystem = default!;
+    [Dependency] private SharedVultureAimSystem _cmuVultureAim = default!; // CMU14
     [Dependency] private EntityWhitelistSystem _entityWhitelistSystem = default!;
     [Dependency] private MetaDataSystem _metaDataSystem = default!;
     [Dependency] private SharedActionsSystem _actionsSystem = default!;
@@ -353,6 +355,10 @@ public sealed partial class AttachableToggleableSystem : EntitySystem
     private void OnAttachableMovementLockedMoveInput(Entity<AttachableMovementLockedComponent> user, ref MoveInputEvent args)
     {
         if (!args.HasDirectionalMovement)
+            return;
+
+        // CMU14: movement keys steer a keyboard-aimed Vulture, so they must not fold its bipod.
+        if (_cmuVultureAim.TryGetKeyboardAim(user.Owner, out _))
             return;
 
         for (var i = user.Comp.AttachableList.Count - 1; i >= 0; i--)

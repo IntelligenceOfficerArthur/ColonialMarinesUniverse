@@ -9,6 +9,7 @@ using Content.Shared._RMC14.Scoping;
 using Content.Shared._RMC14.Weapons.Ranged.Vulture;
 using Content.Shared.CMU14.Vulture;
 using Content.Shared.Movement.Components;
+using Content.Shared.Wieldable;
 using Robust.Shared.Input;
 using Robust.Shared.Maths;
 
@@ -46,11 +47,19 @@ public sealed class CMUVultureKeyboardAimTest : MovementTest
         await Server.WaitPost(() =>
         {
             Assert.That(SEntMan.GetComponent<AttachableToggleableComponent>(bipodUid).Active, Is.True, "bipod deployed");
-            var scopeComp = SEntMan.GetComponent<ScopeComponent>(_scope);
-            Assert.That(Server.System<ScopeSystem>().StartScoping((_scope, scopeComp), SPlayer), Is.Not.Null);
+            // The scope attachment only works while the rifle is wielded.
+            Assert.That(Server.System<SharedWieldableSystem>().TryWield(_rifle, SPlayer), Is.True, "wielded");
         });
 
-        await Pair.RunTicksSync(10);
+        await RunSeconds(8);
+        await Server.WaitPost(() =>
+        {
+            // Scope in through the scope attachment's real toggle action.
+            var scopeToggle = new AttachableToggleActionEvent { Performer = SPlayer };
+            SEntMan.EventBus.RaiseLocalEvent(_scope, scopeToggle);
+        });
+
+        await RunSeconds(3);
     }
 
     private bool BreathHeld() => Aim().BreathEndsAt > STiming.CurTime;
@@ -75,6 +84,12 @@ public sealed class CMUVultureKeyboardAimTest : MovementTest
         // Tap up, then right: one tile each.
         await SetKey(EngineKeyFunctions.MoveUp, BoundKeyState.Down);
         await Pair.RunTicksSync(3);
+        await Server.WaitAssertion(() =>
+        {
+            var mover = SEntMan.GetComponent<InputMoverComponent>(SPlayer);
+            Assert.That(mover.HeldMoveButtons.ToString(), Does.Contain("Up"), "server saw the key");
+            Assert.That(Aim().CrosshairAdjust, Is.EqualTo(new Vector2i(0, 1)), $"after press, scoping={SEntMan.HasComponent<ScopingComponent>(SPlayer)} sniper={Aim().Sniper}");
+        });
         await SetKey(EngineKeyFunctions.MoveUp, BoundKeyState.Up);
         await Pair.RunTicksSync(3);
         await SetKey(EngineKeyFunctions.MoveRight, BoundKeyState.Down);
