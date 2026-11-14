@@ -29,13 +29,15 @@ public sealed class CMUVultureKeyboardAimSystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<ScopingComponent, MoveInputEvent>(OnMoveInput);
+        // The event bus allows one subscriber per component and event, and ScopingComponent already has them for
+        // MoveInputEvent (scope system) and ScopedEvent (Vulture server system), so listen through the mover instead.
+        SubscribeLocalEvent<InputMoverComponent, MoveInputEvent>(OnMoveInput);
         SubscribeLocalEvent<ScopingComponent, UpdateCanMoveEvent>(OnUpdateCanMove);
-        SubscribeLocalEvent<ScopingComponent, ScopedEvent>(OnScoped);
+        SubscribeLocalEvent<InputMoverComponent, ScopedEvent>(OnScoped);
         SubscribeLocalEvent<ScopingComponent, ComponentShutdown>(OnScopingShutdown);
     }
 
-    private void OnScoped(Entity<ScopingComponent> user, ref ScopedEvent args)
+    private void OnScoped(Entity<InputMoverComponent> user, ref ScopedEvent args)
     {
         if (_net.IsClient || !_vulture.TryGetKeyboardAim(user, out _))
             return;
@@ -64,7 +66,7 @@ public sealed class CMUVultureKeyboardAimSystem : EntitySystem
             args.Cancel();
     }
 
-    private void OnMoveInput(Entity<ScopingComponent> user, ref MoveInputEvent args)
+    private void OnMoveInput(Entity<InputMoverComponent> user, ref MoveInputEvent args)
     {
         if (_net.IsClient || !_vulture.TryGetKeyboardAim(user, out var aim))
             return;
