@@ -35,6 +35,18 @@ public sealed partial class CMUVultureThermalComponent : Component
     public float CeilingLevel = 0.5f;
 
     /// <summary>
+    ///     How strongly local contrast is boosted, so edges and objects show on an evenly lit scene.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float DetailGain = 5f;
+
+    /// <summary>
+    ///     Distance in screen pixels at which the local average is taken for the contrast boost.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float DetailRadius = 3f;
+
+    /// <summary>
     ///     Base heat of a living body, from 0 (dark red) to 1 (yellow).
     /// </summary>
     [DataField, AutoNetworkedField]
