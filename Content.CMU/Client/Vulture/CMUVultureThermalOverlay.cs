@@ -43,6 +43,17 @@ public sealed class CMUVultureThermalOverlay : Overlay
     private readonly ShaderInstance _worldShader;
     private readonly ShaderInstance _heatShader;
 
+    /// <summary>
+    ///     Debug aid, set by the <c>vulturethermal</c> command. 0 is the full picture, 1 shows the plain scope view
+    ///     with nothing drawn on it, 2 is the grey backdrop only, 3 is the heat silhouettes and crosshair only.
+    /// </summary>
+    public int DebugMode;
+
+    /// <summary>Bodies seen in the scope window last frame, and how many of them were drawn.</summary>
+    public int LastBodiesInWindow;
+    public int LastBodiesDrawn;
+    public bool LastScreenTextureMissing;
+
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
     public override bool RequestScreenTexture => true;
 
@@ -79,7 +90,12 @@ public sealed class CMUVultureThermalOverlay : Overlay
 
         var handle = args.WorldHandle;
 
-        if (ScreenTexture != null)
+        // Mode 1 leaves the scope view untouched so it can be compared with the thermal picture.
+        if (DebugMode == 1)
+            return;
+
+        LastScreenTextureMissing = ScreenTexture == null;
+        if (ScreenTexture != null && DebugMode != 3)
         {
             _worldShader.SetParameter("SCREEN_TEXTURE", ScreenTexture);
             _worldShader.SetParameter("low_cut", thermal.LowCut);
@@ -98,6 +114,9 @@ public sealed class CMUVultureThermalOverlay : Overlay
         var eyeRot = eye?.Rotation ?? default;
         var map = eye?.Position.MapId;
         var window = GetWindow(args, aim);
+
+        LastBodiesInWindow = 0;
+        LastBodiesDrawn = 0;
 
         _heatShader.SetParameter("heat_base", thermal.HeatBase);
         _heatShader.SetParameter("heat_spread", thermal.HeatSpread);
@@ -120,16 +139,22 @@ public sealed class CMUVultureThermalOverlay : Overlay
             if (!window.Contains(position))
                 continue;
 
+            LastBodiesInWindow++;
+
             if (!thermal.SeeThroughWalls && !_examine.InRangeUnOccluded(player, uid, SightRange))
                 continue;
 
-            _sprite.RenderSprite((uid, sprite), handle, eyeRot, rotation, position);
+            LastBodiesDrawn++;
+
+            if (DebugMode != 2)
+                _sprite.RenderSprite((uid, sprite), handle, eyeRot, rotation, position);
         }
 
         handle.UseShader(null);
         handle.SetTransform(Matrix3x2.Identity);
 
-        DrawCrosshair(handle, aim, window);
+        if (DebugMode != 2)
+            DrawCrosshair(handle, aim, window);
     }
 
     /// <summary>
