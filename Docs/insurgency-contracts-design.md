@@ -41,8 +41,8 @@ loop. Each maps to an existing objective type in `Content.CMU/Shared/Round/Objec
 | 5 | Grid sabotage | French Resistance sabotaged power, transport and telecoms | Disable a power or comms node | Destroy | Defend and repair it |
 | 6 | Clandestine radio | Resistance "pianists" transmitted from hidden sets under code names | Set up a transmitter and keep it broadcasting | Interact + Hotspot | Triangulate and raid it |
 | 7 | Propaganda run | Printing and distributing propaganda is a classic insurgent first phase | Post material at several sites | Interact | Tear it down, watch the sites |
-| 8 | Silence the informant | Insurgent counterintelligence hunted informers who exposed cells | Eliminate a marked colony or GOVFOR informant | Kill | Protect the target, trace the killer |
-| 9 | Convoy ambush | Hit-and-run ambushes were the core guerrilla tactic | Disable a supply vehicle and loot its cargo | Destroy + Fetch | Escort convoys, respond fast |
+| 8 | Supply cache | Viet Cong hid weapons and food in caches across the countryside, moved by civilians | Collect supplies and stash them at marked hiding spots | Fetch + Interact | Find and dig up the cache |
+| 9 | Booby-trap the road | Viet Cong booby traps and tripwires slowed and bled patrols | Set up tripwires at marked choke points (uses the existing Sapper tripwire) | Interact + Hotspot | Clear the traps, scout the choke points |
 | 10 | Safe house | Cu Chi tunnels served as hidden fighting bases | Establish and hold a hideout | Capture / Hotspot | Find and clear it |
 
 Sources and gaps: the web search supported the general tactics (stolen arms, airdrops, couriers,
