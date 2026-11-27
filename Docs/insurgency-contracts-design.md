@@ -27,18 +27,27 @@ against.
 4. CLF completes the contract before the timer runs out. GOVFOR tries to find it and shut it down.
 5. Rewards pay out as intel points. The existing Analyzer path stays, with a reduced role.
 
-## Contract types
+## Contract types (10 jobs, themed on historical insurgencies)
 
-Smuggling is the first one you asked for. The rest reuse existing objective components in
-`Content.CMU/Shared/Round/Objectives/Type` (Fetch, Interact, Destroy, Capture, Hotspot):
+The Analyzer's money submission is replaced by this pool of 10 jobs, so income is not one repeated
+loop. Each maps to an existing objective type in `Content.CMU/Shared/Round/Objectives/Type`.
 
-| Contract | Task | GOVFOR counterplay |
-|---|---|---|
-| Cargo smuggle | Get contraband crates into the colony ASRS, or onto an outbound shipment, unflagged | Inspect and seize crates, and catch whoever sends them |
-| Dead drop | Deliver an item to a marked location | Stake out the drop location after the late alert |
-| Signal jam / sabotage | Interact with or destroy a target | Defend or repair it |
-| Data theft | Fetch a disk from a site and bring it to the Analyzer | Intercept the carrier |
-| Hold the point | Capture and hold a zone (Hotspot) | Contest the zone |
+| # | Contract | Historical basis | Task | Type | GOVFOR counterplay |
+|---|---|---|---|---|---|
+| 1 | Arms skim | Mau Mau and others armed themselves from stolen government arms | Steal a weapons crate from a depot | Fetch | Guard or audit the depot |
+| 2 | Airdrop recovery | Sten and FP-45 weapons were designed to be airdropped to resistance | Reach a marked drop zone and recover the crate | Fetch + Hotspot | Race CLF to the zone |
+| 3 | Cargo smuggle | Ho Chi Minh Trail logistics, FLN financing networks | Get contraband into the colony ASRS unflagged | Fetch + Interact | Inspect and seize crates |
+| 4 | Courier run | Viet Cong cells linked by couriers on separate, compartmentalized routes | Carry a package to a drop through one of several routes | Fetch + Interact | Patrol routes, search carriers |
+| 5 | Grid sabotage | French Resistance sabotaged power, transport and telecoms | Disable a power or comms node | Destroy | Defend and repair it |
+| 6 | Clandestine radio | Resistance "pianists" transmitted from hidden sets under code names | Set up a transmitter and keep it broadcasting | Interact + Hotspot | Triangulate and raid it |
+| 7 | Propaganda run | Printing and distributing propaganda is a classic insurgent first phase | Post material at several sites | Interact | Tear it down, watch the sites |
+| 8 | Escape line | Resistance escape networks moved people behind enemy lines | Extract a wanted person to a safe house | Rescue survivor | Intercept the convoy |
+| 9 | Levy | The FLN taxed supporters to fund the fight | Collect funds from colony ATMs or businesses | Interact (ties into Sapper) | Protect ATMs, hunt the collectors |
+| 10 | Safe house | Cu Chi tunnels served as hidden fighting bases | Establish and hold a hideout | Capture / Hotspot | Find and clear it |
+
+Sources and gaps: the web search supported the general tactics (stolen arms, airdrops, couriers,
+sabotage, escape lines, radio, taxation, tunnels). It did not give direct detail on dead drops,
+forged documents, or prisoner rescue, so those are not claimed above.
 
 ## Risk and Heat
 
