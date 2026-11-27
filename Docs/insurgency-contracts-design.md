@@ -27,78 +27,79 @@ against.
 4. CLF completes the contract before the timer runs out. GOVFOR tries to find it and shut it down.
 5. Rewards pay out as intel points. The existing Analyzer path stays, with a reduced role.
 
-## Contract types (10 jobs, themed on historical insurgencies)
+## Contract types (10 new objectives)
 
 The Analyzer's money submission is replaced by this pool of 10 jobs, so income is not one repeated
-loop. Rules for every contract: no target is a specific person, and each is built from existing
-objective types in `Content.CMU/Shared/Round/Objectives/Type` (Fetch, Interact, Destroy, Capture,
-Hotspot), items, zones and the Sapper tripwire.
+loop. These are designed fresh and may need new content (marked "New"). Rules for every contract: no
+target is a specific person, and each is a place, an item, a device or a meter.
 
 Heat is how loud the job is: it shortens the GOVFOR detection delay and raises the reward.
 
-### 1. Arms skim (Heat: medium)
-- **Basis:** Mau Mau and others armed themselves from stolen government arms.
-- **Job:** Take a weapons crate from a marked depot and get it back to the cell.
-- **Twist:** The crate is heavy and slows whoever carries it, so CLF has to choose a route and a carrier.
-- **GOVFOR counter:** Guard the depot, or catch the carrier while slowed.
+### 1. Pirate broadcast (Heat: high)
+- **Basis:** Insurgents used radio and propaganda to build support.
+- **Job:** Tap the colony intercom and air a CLF message.
+- **New:** A broadcast hijack device that plays across all colony intercoms.
+- **Twist:** The longer the message plays, the more points, but the source gets easier to trace.
+- **Counter:** Find and cut the device.
 
-### 2. Airdrop recovery (Heat: high)
-- **Basis:** Sten and FP-45 weapons were designed to be airdropped to resistance groups.
-- **Job:** CLF lights a beacon. After a delay a crate drops at a marked zone; recover it.
-- **Twist:** The flare is visible to everyone, so the drop is a race. Once it lands, both sides know where.
-- **GOVFOR counter:** Reach the zone first.
+### 2. Black market stall (Heat: low)
+- **Job:** Set up a hidden stall that sells to colonists and earns points per sale.
+- **New:** A stall device and a colonist purchase loop.
+- **Twist:** Better goods sell more but raise Heat.
+- **Counter:** Police find and raid the stall.
 
-### 3. Cargo smuggle (Heat: low, slow)
-- **Basis:** Ho Chi Minh Trail logistics and FLN financing networks moved goods through ordinary channels.
-- **Job:** Get contraband into the colony ASRS (cargo shipping) unflagged.
-- **Twist:** The longer the crate sits unsent, the higher the chance it gets inspected.
-- **GOVFOR counter:** Inspect and seize crates.
+### 3. Forged papers (Heat: medium)
+- **Job:** Produce forged colony permits at a hidden bench and deliver them to a drop.
+- **New:** A forgery bench and a permit item.
+- **Twist:** A delivered permit lets CLF pass one checkpoint unsearched.
+- **Counter:** Police check permits against the colony record.
 
-### 4. Courier run (Heat: low)
-- **Basis:** Viet Cong cells were linked by couriers on separate, compartmentalized routes.
-- **Job:** Carry a package to a drop point, choosing one of three routes.
-- **Twist:** Each route trades speed for risk. A package on a slow, quiet route earns a bonus.
-- **GOVFOR counter:** Patrol the likely routes and search anyone carrying a package.
-
-### 5. Grid sabotage (Heat: high)
-- **Basis:** The French Resistance sabotaged power, transport and telecoms.
-- **Job:** Disable a power or comms node in the colony.
-- **Twist:** The blackout is also a distraction. Other contracts get a shorter detection delay while it lasts.
-- **GOVFOR counter:** Defend and repair the node.
-
-### 6. Clandestine radio (Heat: grows over time)
-- **Basis:** Resistance radio operators transmitted from hidden sets under code names.
-- **Job:** Set up a transmitter and keep it broadcasting for a set time.
-- **Twist:** The signal gets easier to locate the longer it runs, so CLF can cut it early for a smaller payout.
-- **GOVFOR counter:** Triangulate and raid it.
-
-### 7. Propaganda run (Heat: low)
-- **Basis:** Printing and distributing propaganda is a classic first phase of an insurgency.
-- **Job:** Post material at several marked sites around the colony.
-- **Twist:** Each poster that stays up pays a trickle of points. Posters torn down stop paying.
-- **GOVFOR counter:** Tear them down and watch the sites.
-
-### 8. Supply cache (Heat: low)
-- **Basis:** Viet Cong hid weapons and food in caches across the countryside, moved by civilians.
-- **Job:** Collect supplies and stash them at marked hiding spots.
-- **Twist:** A hidden cache can be drawn on later for a one-time vendor discount, but it can be found.
-- **GOVFOR counter:** Find and dig up the cache.
-
-### 9. Booby-trap the road (Heat: medium)
-- **Basis:** Viet Cong booby traps and tripwires slowed and bled patrols.
-- **Job:** Set up tripwires at marked choke points, using the existing Sapper tripwire.
-- **Twist:** Points accrue each time a trap is triggered, not only on setup.
-- **GOVFOR counter:** Clear the traps and scout the choke points.
-
-### 10. Safe house (Heat: medium)
+### 4. Tunnel dig (Heat: low, slow)
 - **Basis:** The Cu Chi tunnels served as hidden fighting bases.
-- **Job:** Establish a hideout and hold it for a set time.
-- **Twist:** While it stands, CLF members can heal and resupply there, so holding it is worth defending.
-- **GOVFOR counter:** Find it and clear it.
+- **Job:** Dig a hidden tunnel linking two points inside the colony.
+- **New:** Tunnel entrances that connect two places for CLF only.
+- **Twist:** A finished tunnel is a permanent shortcut, but a discovered one collapses.
+- **Counter:** Spot the entrances and seal them.
 
-Sources and gaps: the web search supported the general tactics (stolen arms, airdrops, couriers,
-sabotage, radio, tunnels). It did not give direct detail on dead drops, forged documents, or prisoner
-rescue, so those are not claimed above.
+### 5. Diversion (Heat: high)
+- **Job:** Set off decoy alarms and fake fires across the colony to pull police and GOVFOR away.
+- **New:** A decoy device that triggers a fake alert.
+- **Twist:** Lasts only as long as responders believe the alerts, and each used decoy makes the next less convincing.
+- **Counter:** Verify before responding.
+
+### 6. Evidence raid (Heat: high)
+- **Job:** Break into the police evidence locker and recover seized contraband.
+- **New:** An evidence locker that holds items seized from CLF.
+- **Twist:** It holds whatever police actually seized, so the reward depends on how well they have been doing.
+- **Counter:** Guard the locker.
+
+### 7. Wiretap (Heat: low)
+- **Basis:** Intelligence collection is a standard underground function.
+- **Job:** Plant a bug in a police or GOVFOR comms point and let it listen.
+- **New:** A bug device that relays intercepted chatter to CLF.
+- **Twist:** While it runs, CLF gets early warning of GOVFOR alerts, so detection delay on other contracts grows.
+- **Counter:** Sweep for bugs.
+
+### 8. Toll road (Heat: medium)
+- **Basis:** The FLN taxed supporters to fund the fight.
+- **Job:** Set up a toll point on a route that collects from passing traffic.
+- **New:** A toll barrier that takes a cut from vehicles and people passing through.
+- **Twist:** Higher tolls pay more but make people avoid the route.
+- **Counter:** Clear the barrier, or reroute traffic.
+
+### 9. General strike (Heat: medium)
+- **Job:** Shut down colony workplaces by cutting their breaker boxes, until a number of sites stay dark for a set time.
+- **New:** A strike counter per site.
+- **Twist:** Each shut site costs the colony income, which hurts GOVFOR indirectly.
+- **Counter:** Restore the breakers.
+
+### 10. Observation post (Heat: low)
+- **Job:** Hide a lookout at marked vantage points.
+- **New:** A hidden post device that shows nearby movement to CLF.
+- **Twist:** Several posts give a growing map of patrol routes.
+- **Counter:** Find and remove the posts.
+
+Sources and gaps: the web search supported insurgent radio and propaganda, intelligence collection, taxation and tunnels. Black markets, forged papers, decoy diversions and strikes were not covered by the search, so their historical basis is not claimed.
 
 ## Risk and Heat
 
