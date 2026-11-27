@@ -30,24 +30,75 @@ against.
 ## Contract types (10 jobs, themed on historical insurgencies)
 
 The Analyzer's money submission is replaced by this pool of 10 jobs, so income is not one repeated
-loop. Each maps to an existing objective type in `Content.CMU/Shared/Round/Objectives/Type`.
+loop. Rules for every contract: no target is a specific person, and each is built from existing
+objective types in `Content.CMU/Shared/Round/Objectives/Type` (Fetch, Interact, Destroy, Capture,
+Hotspot), items, zones and the Sapper tripwire.
 
-| # | Contract | Historical basis | Task | Type | GOVFOR counterplay |
-|---|---|---|---|---|---|
-| 1 | Arms skim | Mau Mau and others armed themselves from stolen government arms | Steal a weapons crate from a depot | Fetch | Guard or audit the depot |
-| 2 | Airdrop recovery | Sten and FP-45 weapons were designed to be airdropped to resistance | Reach a marked drop zone and recover the crate | Fetch + Hotspot | Race CLF to the zone |
-| 3 | Cargo smuggle | Ho Chi Minh Trail logistics, FLN financing networks | Get contraband into the colony ASRS unflagged | Fetch + Interact | Inspect and seize crates |
-| 4 | Courier run | Viet Cong cells linked by couriers on separate, compartmentalized routes | Carry a package to a drop through one of several routes | Fetch + Interact | Patrol routes, search carriers |
-| 5 | Grid sabotage | French Resistance sabotaged power, transport and telecoms | Disable a power or comms node | Destroy | Defend and repair it |
-| 6 | Clandestine radio | Resistance "pianists" transmitted from hidden sets under code names | Set up a transmitter and keep it broadcasting | Interact + Hotspot | Triangulate and raid it |
-| 7 | Propaganda run | Printing and distributing propaganda is a classic insurgent first phase | Post material at several sites | Interact | Tear it down, watch the sites |
-| 8 | Supply cache | Viet Cong hid weapons and food in caches across the countryside, moved by civilians | Collect supplies and stash them at marked hiding spots | Fetch + Interact | Find and dig up the cache |
-| 9 | Booby-trap the road | Viet Cong booby traps and tripwires slowed and bled patrols | Set up tripwires at marked choke points (uses the existing Sapper tripwire) | Interact + Hotspot | Clear the traps, scout the choke points |
-| 10 | Safe house | Cu Chi tunnels served as hidden fighting bases | Establish and hold a hideout | Capture / Hotspot | Find and clear it |
+Heat is how loud the job is: it shortens the GOVFOR detection delay and raises the reward.
+
+### 1. Arms skim (Heat: medium)
+- **Basis:** Mau Mau and others armed themselves from stolen government arms.
+- **Job:** Take a weapons crate from a marked depot and get it back to the cell.
+- **Twist:** The crate is heavy and slows whoever carries it, so CLF has to choose a route and a carrier.
+- **GOVFOR counter:** Guard the depot, or catch the carrier while slowed.
+
+### 2. Airdrop recovery (Heat: high)
+- **Basis:** Sten and FP-45 weapons were designed to be airdropped to resistance groups.
+- **Job:** CLF lights a beacon. After a delay a crate drops at a marked zone; recover it.
+- **Twist:** The flare is visible to everyone, so the drop is a race. Once it lands, both sides know where.
+- **GOVFOR counter:** Reach the zone first.
+
+### 3. Cargo smuggle (Heat: low, slow)
+- **Basis:** Ho Chi Minh Trail logistics and FLN financing networks moved goods through ordinary channels.
+- **Job:** Get contraband into the colony ASRS (cargo shipping) unflagged.
+- **Twist:** The longer the crate sits unsent, the higher the chance it gets inspected.
+- **GOVFOR counter:** Inspect and seize crates.
+
+### 4. Courier run (Heat: low)
+- **Basis:** Viet Cong cells were linked by couriers on separate, compartmentalized routes.
+- **Job:** Carry a package to a drop point, choosing one of three routes.
+- **Twist:** Each route trades speed for risk. A package on a slow, quiet route earns a bonus.
+- **GOVFOR counter:** Patrol the likely routes and search anyone carrying a package.
+
+### 5. Grid sabotage (Heat: high)
+- **Basis:** The French Resistance sabotaged power, transport and telecoms.
+- **Job:** Disable a power or comms node in the colony.
+- **Twist:** The blackout is also a distraction. Other contracts get a shorter detection delay while it lasts.
+- **GOVFOR counter:** Defend and repair the node.
+
+### 6. Clandestine radio (Heat: grows over time)
+- **Basis:** Resistance radio operators transmitted from hidden sets under code names.
+- **Job:** Set up a transmitter and keep it broadcasting for a set time.
+- **Twist:** The signal gets easier to locate the longer it runs, so CLF can cut it early for a smaller payout.
+- **GOVFOR counter:** Triangulate and raid it.
+
+### 7. Propaganda run (Heat: low)
+- **Basis:** Printing and distributing propaganda is a classic first phase of an insurgency.
+- **Job:** Post material at several marked sites around the colony.
+- **Twist:** Each poster that stays up pays a trickle of points. Posters torn down stop paying.
+- **GOVFOR counter:** Tear them down and watch the sites.
+
+### 8. Supply cache (Heat: low)
+- **Basis:** Viet Cong hid weapons and food in caches across the countryside, moved by civilians.
+- **Job:** Collect supplies and stash them at marked hiding spots.
+- **Twist:** A hidden cache can be drawn on later for a one-time vendor discount, but it can be found.
+- **GOVFOR counter:** Find and dig up the cache.
+
+### 9. Booby-trap the road (Heat: medium)
+- **Basis:** Viet Cong booby traps and tripwires slowed and bled patrols.
+- **Job:** Set up tripwires at marked choke points, using the existing Sapper tripwire.
+- **Twist:** Points accrue each time a trap is triggered, not only on setup.
+- **GOVFOR counter:** Clear the traps and scout the choke points.
+
+### 10. Safe house (Heat: medium)
+- **Basis:** The Cu Chi tunnels served as hidden fighting bases.
+- **Job:** Establish a hideout and hold it for a set time.
+- **Twist:** While it stands, CLF members can heal and resupply there, so holding it is worth defending.
+- **GOVFOR counter:** Find it and clear it.
 
 Sources and gaps: the web search supported the general tactics (stolen arms, airdrops, couriers,
-sabotage, escape lines, radio, taxation, tunnels). It did not give direct detail on dead drops,
-forged documents, or prisoner rescue, so those are not claimed above.
+sabotage, radio, tunnels). It did not give direct detail on dead drops, forged documents, or prisoner
+rescue, so those are not claimed above.
 
 ## Risk and Heat
 
