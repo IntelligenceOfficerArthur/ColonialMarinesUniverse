@@ -27,79 +27,73 @@ against.
 4. CLF completes the contract before the timer runs out. GOVFOR tries to find it and shut it down.
 5. Rewards pay out as intel points. The existing Analyzer path stays, with a reduced role.
 
-## Contract types (10 new objectives)
+## Contract types (10 CLF-only objectives)
 
 The Analyzer's money submission is replaced by this pool of 10 jobs, so income is not one repeated
-loop. These are designed fresh and may need new content (marked "New"). Rules for every contract: no
-target is a specific person, and each is a place, an item, a device or a meter.
+loop. Every job is something CLF does by itself, with CLF's own people and CLF's own gear. None needs
+police, GOVFOR or colonists to take part, and none target a specific person. GOVFOR only receives
+the delayed alert. New content is marked "New".
 
 Heat is how loud the job is: it shortens the GOVFOR detection delay and raises the reward.
 
-### 1. Pirate broadcast (Heat: high)
-- **Basis:** Insurgents used radio and propaganda to build support.
-- **Job:** Tap the colony intercom and air a CLF message.
-- **New:** A broadcast hijack device that plays across all colony intercoms.
-- **Twist:** The longer the message plays, the more points, but the source gets easier to trace.
-- **Counter:** Find and cut the device.
+### 1. Hidden workshop (Heat: low)
+- **Basis:** Cheap weapons such as the Sten were built to be made in bulk and passed to resistance groups.
+- **Job:** Set up a workshop and assemble a set number of improvised weapons or ammo boxes.
+- **New:** A workshop bench and the parts it consumes.
+- **Twist:** The output goes into the cell stockpile and feeds the vendors.
 
-### 2. Black market stall (Heat: low)
-- **Job:** Set up a hidden stall that sells to colonists and earns points per sale.
-- **New:** A stall device and a colonist purchase loop.
-- **Twist:** Better goods sell more but raise Heat.
-- **Counter:** Police find and raid the stall.
+### 2. Airdrop recovery (Heat: high)
+- **Basis:** Sten and FP-45 weapons were designed to be airdropped to resistance groups.
+- **Job:** Light a beacon. After a delay a crate drops at a marked zone; recover it.
+- **New:** A beacon and the drop crate.
+- **Twist:** The flare is visible to everyone, so it is a race against the alert.
 
-### 3. Forged papers (Heat: medium)
-- **Job:** Produce forged colony permits at a hidden bench and deliver them to a drop.
-- **New:** A forgery bench and a permit item.
-- **Twist:** A delivered permit lets CLF pass one checkpoint unsearched.
-- **Counter:** Police check permits against the colony record.
-
-### 4. Tunnel dig (Heat: low, slow)
+### 3. Tunnel dig (Heat: low, slow)
 - **Basis:** The Cu Chi tunnels served as hidden fighting bases.
-- **Job:** Dig a hidden tunnel linking two points inside the colony.
+- **Job:** Dig a hidden tunnel linking two points.
 - **New:** Tunnel entrances that connect two places for CLF only.
-- **Twist:** A finished tunnel is a permanent shortcut, but a discovered one collapses.
-- **Counter:** Spot the entrances and seal them.
+- **Twist:** A finished tunnel is a permanent shortcut for the cell.
 
-### 5. Diversion (Heat: high)
-- **Job:** Set off decoy alarms and fake fires across the colony to pull police and GOVFOR away.
-- **New:** A decoy device that triggers a fake alert.
-- **Twist:** Lasts only as long as responders believe the alerts, and each used decoy makes the next less convincing.
-- **Counter:** Verify before responding.
+### 4. Supply cache (Heat: low)
+- **Basis:** Viet Cong hid weapons and food in caches across the countryside.
+- **Job:** Collect supplies and bury them at marked hiding spots.
+- **New:** A cache item with a one-time vendor discount.
+- **Twist:** The more caches stand at the end of the round, the bigger the bonus.
 
-### 6. Evidence raid (Heat: high)
-- **Job:** Break into the police evidence locker and recover seized contraband.
-- **New:** An evidence locker that holds items seized from CLF.
-- **Twist:** It holds whatever police actually seized, so the reward depends on how well they have been doing.
-- **Counter:** Guard the locker.
+### 5. Pirate broadcast (Heat: high)
+- **Basis:** Insurgents used radio and propaganda to build support.
+- **Job:** Build a transmitter and air a CLF message on a loop.
+- **New:** A transmitter device.
+- **Twist:** More points the longer it plays, but it gets easier to trace.
 
-### 7. Wiretap (Heat: low)
-- **Basis:** Intelligence collection is a standard underground function.
-- **Job:** Plant a bug in a police or GOVFOR comms point and let it listen.
-- **New:** A bug device that relays intercepted chatter to CLF.
-- **Twist:** While it runs, CLF gets early warning of GOVFOR alerts, so detection delay on other contracts grows.
-- **Counter:** Sweep for bugs.
+### 6. Booby-trap the road (Heat: medium)
+- **Basis:** Viet Cong booby traps and tripwires slowed and bled patrols.
+- **Job:** Set tripwires at marked choke points, using the existing Sapper tripwire.
+- **Twist:** Points accrue each time a trap is triggered, not only on setup.
 
-### 8. Toll road (Heat: medium)
-- **Basis:** The FLN taxed supporters to fund the fight.
-- **Job:** Set up a toll point on a route that collects from passing traffic.
-- **New:** A toll barrier that takes a cut from vehicles and people passing through.
-- **Twist:** Higher tolls pay more but make people avoid the route.
-- **Counter:** Clear the barrier, or reroute traffic.
+### 7. Safe house (Heat: medium)
+- **Basis:** The Cu Chi tunnels served as hidden fighting bases.
+- **Job:** Establish a hideout and hold it for a set time.
+- **New:** A hideout marker with a healing and resupply point.
+- **Twist:** While it stands, CLF members can heal and resupply there.
 
-### 9. General strike (Heat: medium)
-- **Job:** Shut down colony workplaces by cutting their breaker boxes, until a number of sites stay dark for a set time.
-- **New:** A strike counter per site.
-- **Twist:** Each shut site costs the colony income, which hurts GOVFOR indirectly.
-- **Counter:** Restore the breakers.
-
-### 10. Observation post (Heat: low)
-- **Job:** Hide a lookout at marked vantage points.
+### 8. Observation post (Heat: low)
+- **Job:** Hide lookouts at marked vantage points.
 - **New:** A hidden post device that shows nearby movement to CLF.
-- **Twist:** Several posts give a growing map of patrol routes.
-- **Counter:** Find and remove the posts.
+- **Twist:** Several posts build a growing map of the area.
 
-Sources and gaps: the web search supported insurgent radio and propaganda, intelligence collection, taxation and tunnels. Black markets, forged papers, decoy diversions and strikes were not covered by the search, so their historical basis is not claimed.
+### 9. Off-grid generator (Heat: medium)
+- **Job:** Build and fuel a hidden generator to power the cell's gear.
+- **New:** A generator and fuel item.
+- **Twist:** Keeping it running pays a trickle of points, and the cell's gear keeps working through any blackout.
+
+### 10. Courier run (Heat: low)
+- **Basis:** Viet Cong cells were linked by couriers on separate, compartmentalized routes.
+- **Job:** Carry a sealed package between two CLF drop points, choosing one of three routes.
+- **New:** A sealed package and two drop points.
+- **Twist:** Each route trades speed for risk. A slow, quiet delivery earns a bonus.
+
+Sources and gaps: the web search supported cheap airdropped weapons, propaganda and radio, couriers, tunnels and tripwires. Workshops, generators and observation posts were not covered by the search, so their historical basis is not claimed.
 
 ## Risk and Heat
 
